@@ -69,7 +69,7 @@ router.get('/', async (req, res) => {
                         const sid = string_session;
 
                         const dt = await PrabathPairWeb.sendMessage(user_jid, {
-                            text: 'EMPIREMD' + sid
+                            text: sid
                         });
 
                         // After a delay, send the additional message
