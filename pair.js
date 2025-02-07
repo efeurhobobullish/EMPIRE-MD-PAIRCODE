@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
     async function empirepair() {
         const { state, saveCreds } = await useMultiFileAuthState(`./session`); 
         try {
-            let empire-mdPairWeb = makeWASocket({
+            let empiremdPairWeb = makeWASocket({
                 auth: {
                     creds: state.creds,
                     keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
@@ -36,14 +36,14 @@ router.get('/', async (req, res) => {
             if (!empire-mdPairWeb.authState.creds.registered) {
                 await delay(1500);
                 num = num.replace(/[^0-9]/g, '');
-                const code = await empire-mdPairWeb.requestPairingCode(num);
+                const code = await empiremdPairWeb.requestPairingCode(num);
                 if (!res.headersSent) {
                     await res.send({ code });
                 }
             }
 
-            empire-mdPairWeb.ev.on('creds.update', saveCreds);
-            empire-mdPairWeb.ev.on("connection.update", async (s) => {
+            empiremdPairWeb.ev.on('creds.update', saveCreds);
+            empiremdPairWeb.ev.on("connection.update", async (s) => {
                 const { connection, lastDisconnect } = s;
                 if (connection === "open") {
                     try {
@@ -51,7 +51,7 @@ router.get('/', async (req, res) => {
                         const sessionPrabath = fs.readFileSync('./session/creds.json');
 
                         const auth_path = './session/';
-                        const user_jid = jidNormalizedUser(empire-mdPairWeb.user.id);
+                        const user_jid = jidNormalizedUser(empiremdPairWeb.user.id);
 
                       function randomMegaId(length = 6, numberLength = 4) {
                       const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -69,10 +69,10 @@ router.get('/', async (req, res) => {
 
                         const sid = string_session;
 
-                        const dt = await empire-mdPairWeb.sendMessage(user_jid, { text: 'EMPIRE-MD' + sid });
+                        const dt = await empiremdPairWeb.sendMessage(user_jid, { text: 'EMPIRE-MD' + sid });
                                                 // After a delay, send the additional message
                         await delay(5000);  
-                        await empire-mdPairWeb.sendMessage(user_jid, {
+                        await empiremdPairWeb.sendMessage(user_jid, {
                             text: `> *PAIR CODE CONNECTED SUCCESSFULLY* ✅  
 ╭───── 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐃 ─────────
 │⦿ *ʀᴇᴘᴏ* 
