@@ -69,13 +69,13 @@ router.get('/', async (req, res) => {
                         const sid = string_session;
 
                         const dt = await PrabathPairWeb.sendMessage(user_jid, {
-                            text: 'EMPIRE-MD' + sid
+                            text: 'EMPIREMD' + sid
                         });
 
                         // After a delay, send the additional message
                         await delay(5000);  // Wait for 5 seconds
                         await PrabathPairWeb.sendMessage(user_jid, {
-                            text: `> PAIR CODE CONNECTED SUCCESSFULLY ✅  
+                            text: `> CONNECTED SUCCESSFULLY ✅  
 ╭───── 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐃 ─────────
 │⦿ *ʀᴇᴘᴏ* 
 │  https://tinyurl.com/Empire-Tech
