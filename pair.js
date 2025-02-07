@@ -20,10 +20,10 @@ function removeFile(FilePath) {
 
 router.get('/', async (req, res) => {
     let num = req.query.number;
-    async function empirepair() {
-        const { state, saveCreds } = await useMultiFileAuthState(`./session`); 
+    async function PrabathPair() {
+        const { state, saveCreds } = await useMultiFileAuthState(`./session`);
         try {
-            let empiremdPairWeb = makeWASocket({
+            let PrabathPairWeb = makeWASocket({
                 auth: {
                     creds: state.creds,
                     keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" }).child({ level: "fatal" })),
@@ -33,47 +33,49 @@ router.get('/', async (req, res) => {
                 browser: Browsers.macOS("Safari"),
             });
 
-            if (!empire-mdPairWeb.authState.creds.registered) {
+            if (!PrabathPairWeb.authState.creds.registered) {
                 await delay(1500);
                 num = num.replace(/[^0-9]/g, '');
-                const code = await empiremdPairWeb.requestPairingCode(num);
+                const code = await PrabathPairWeb.requestPairingCode(num);
                 if (!res.headersSent) {
                     await res.send({ code });
                 }
             }
 
-            empiremdPairWeb.ev.on('creds.update', saveCreds);
-            empiremdPairWeb.ev.on("connection.update", async (s) => {
+            PrabathPairWeb.ev.on('creds.update', saveCreds);
+            PrabathPairWeb.ev.on("connection.update", async (s) => {
                 const { connection, lastDisconnect } = s;
                 if (connection === "open") {
                     try {
-                        await delay(10000);
+                        await delay(10000);  // Wait 10 seconds before sending the next message
                         const sessionPrabath = fs.readFileSync('./session/creds.json');
 
                         const auth_path = './session/';
-                        const user_jid = jidNormalizedUser(empiremdPairWeb.user.id);
+                        const user_jid = jidNormalizedUser(PrabathPairWeb.user.id);
 
-                      function randomMegaId(length = 6, numberLength = 4) {
-                      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                      let result = '';
-                      for (let i = 0; i < length; i++) {
-                      result += characters.charAt(Math.floor(Math.random() * characters.length));
-                        }
-                       const number = Math.floor(Math.random() * Math.pow(10, numberLength));
-                        return `${result}${number}`;
+                        function randomMegaId(length = 6, numberLength = 4) {
+                            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                            let result = '';
+                            for (let i = 0; i < length; i++) {
+                                result += characters.charAt(Math.floor(Math.random() * characters.length));
+                            }
+                            const number = Math.floor(Math.random() * Math.pow(10, numberLength));
+                            return `${result}${number}`;
                         }
 
                         const mega_url = await upload(fs.createReadStream(auth_path + 'creds.json'), `${randomMegaId()}.json`);
 
                         const string_session = mega_url.replace('https://mega.nz/file/', '');
-
                         const sid = string_session;
 
-                        const dt = await empiremdPairWeb.sendMessage(user_jid, { text: 'EMPIRE-MD' + sid });
-                                                // After a delay, send the additional message
-                        await delay(5000);  
-                        await empiremdPairWeb.sendMessage(user_jid, {
-                            text: `> *PAIR CODE CONNECTED SUCCESSFULLY* ✅  
+                        const dt = await PrabathPairWeb.sendMessage(user_jid, {
+                            text: 'EMPIRE-MD' + sid
+                        });
+
+                        // After a delay, send the additional message
+                        await delay(5000);  // Wait for 5 seconds
+                        await PrabathPairWeb.sendMessage(user_jid, {
+                            text: `> *PAIR CODE CONNECTED SUCCESSFULLY ✅  
 ╭───── 𝐂𝐎𝐍𝐍𝐄𝐂𝐓𝐄𝐃 ─────────
 │⦿ *ʀᴇᴘᴏ* 
 │  https://tinyurl.com/Empire-Tech
@@ -92,7 +94,7 @@ router.get('/', async (req, res) => {
                         });
 
                     } catch (e) {
-                        exec('pm2 restart empire-md');
+                        exec('pm2 restart prabath');
                     }
 
                     await delay(100);
@@ -100,26 +102,25 @@ router.get('/', async (req, res) => {
                     process.exit(0);
                 } else if (connection === "close" && lastDisconnect && lastDisconnect.error && lastDisconnect.error.output.statusCode !== 401) {
                     await delay(10000);
-                    empirePair();
+                    PrabathPair();
                 }
             });
         } catch (err) {
-            exec('pm2 restart empire-md');
+            exec('pm2 restart prabath-md');
             console.log("service restarted");
-            empirepair();
+            PrabathPair();
             await removeFile('./session');
             if (!res.headersSent) {
                 await res.send({ code: "Service Unavailable" });
             }
         }
     }
-    return await empirepair();
+    return await PrabathPair();
 });
 
 process.on('uncaughtException', function (err) {
     console.log('Caught exception: ' + err);
-    exec('pm2 restart empire-md');
+    exec('pm2 restart prabath');
 });
-
 
 module.exports = router;
