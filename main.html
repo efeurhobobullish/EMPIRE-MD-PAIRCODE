@@ -1,0 +1,45 @@
+<html>
+<head>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: black;
+            font-family: Arial, sans-serif;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px; /* Increased gap between buttons */
+        }
+
+        .btn {
+            padding: 30px 60px; /* Increased padding for bigger buttons */
+            border: 3px solid #0000ff; /* Thicker border */
+            border-radius: 35px; /* Larger border radius */
+            color: #0000ff;
+            background-color: transparent;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 36px; /* Much larger font size */
+            font-weight: 900; /* Bold text */
+            cursor: pointer;
+            box-shadow: 0 0 15px #0000ff; /* Slightly stronger shadow */
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 25px #0000ff; /* Larger hover shadow */
+        }
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        <button onclick="window.open('/qr')" class="btn">QR Code</button>
+        <button onclick="window.open('/pair')" class="btn">Pair Code</button>
+    </div>
+</body>
+</html>
